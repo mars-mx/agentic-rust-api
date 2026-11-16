@@ -1,0 +1,11 @@
+id: axum-path-syntax
+valid:
+  - |
+    fn router() -> Router<AppState> { Router::new().route("/stores/{id}", get(show)) }
+  - |
+    fn url() -> &'static str { "https://example.com/a:b" }
+invalid:
+  - |
+    fn router() -> Router<AppState> { Router::new().route("/stores/:id", get(show)) }
+  - |
+    fn router() -> Router<AppState> { Router::new().route("/files/*path", get(show)) }

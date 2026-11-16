@@ -1,0 +1,9 @@
+id: no-repository-traits
+language: rust
+severity: error
+message: The db crate exposes plain async functions, one per query. No traits.
+note: No repository traits and no generic repositories. A caller passes &mut PgConnection to the function it needs.
+files:
+  - crates/db/src/**/*.rs
+rule:
+  kind: trait_item

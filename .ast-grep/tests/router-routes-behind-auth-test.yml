@@ -1,0 +1,11 @@
+id: router-routes-behind-auth
+valid:
+  - |
+    fn api(state: AppState) -> OpenApiRouter<AppState> { OpenApiRouter::new().routes(routes!(a)).routes(routes!(b)).route_layer(from_fn_with_state(state, require_auth)) }
+invalid:
+  - |
+    fn api() -> OpenApiRouter<AppState> { OpenApiRouter::new().routes(routes!(a)) }
+  - |
+    fn api(state: AppState) -> OpenApiRouter<AppState> { OpenApiRouter::new().route_layer(from_fn_with_state(state, require_auth)).routes(routes!(a)) }
+  - |
+    fn api(state: AppState) -> OpenApiRouter<AppState> { OpenApiRouter::new().routes(routes!(a)).route_layer(from_fn(log_request)) }

@@ -1,0 +1,16 @@
+[package]
+name = "pass"
+version = "0.0.0"
+edition.workspace = true
+publish = false
+
+[dependencies]
+axum = "0.8.9"
+serde = { version = "1.0.229", features = ["derive"] }
+thiserror = "2"
+time = "0.3"
+tracing = "0.1.44"
+uuid = { version = "1", features = ["v7", "serde"] }
+
+[lints]
+workspace = true

@@ -1,0 +1,46 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/agent-guard.sh pre"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/agent-guard.sh post"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Edit(./Cargo.toml)",
+      "Edit(./clippy.toml)",
+      "Edit(./deny.toml)",
+      "Edit(./sgconfig.yml)",
+      "Edit(./rust-toolchain.toml)",
+      "Edit(./Makefile)",
+      "Edit(./.cargo/**)",
+      "Edit(./.ast-grep/**)",
+      "Edit(./checks/**)",
+      "Edit(./guard/**)",
+      "Edit(./xtask/**)",
+      "Edit(./bins/migrate/**)",
+      "Edit(./scripts/agent-guard.sh)",
+      "Edit(./scripts/tests/**)",
+      "Edit(./.claude/settings.json)",
+      "Bash(*--no-verify*)"
+    ]
+  }
+}

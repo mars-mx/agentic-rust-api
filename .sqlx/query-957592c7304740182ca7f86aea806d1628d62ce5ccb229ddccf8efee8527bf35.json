@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\nFROM\n    set_config('app.organization_id', $1, true) AS organization,\n    set_config('app.user_id', $2, true) AS member\n",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "957592c7304740182ca7f86aea806d1628d62ce5ccb229ddccf8efee8527bf35"
+}

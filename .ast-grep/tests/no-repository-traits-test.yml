@@ -1,0 +1,7 @@
+id: no-repository-traits
+valid:
+  - |
+    pub async fn get(c: &mut PgConnection, org: OrgId) -> Result<StoreRow, DbError> { load(c, org).await }
+invalid:
+  - |
+    pub trait StoreRepository { async fn get(&self, id: StoreId) -> Result<Store, DbError>; }

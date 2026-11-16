@@ -1,0 +1,21 @@
+id: routing-only-in-router
+valid:
+  - |
+    async fn main() -> anyhow::Result<()> { let app = api::router(state); serve(listener, app).await?; Ok(()) }
+  - |
+    fn load() -> Figment { Figment::new() }
+invalid:
+  - |
+    fn extra() -> Router { Router::new().route("/api/v1/x", get(x)) }
+  - |
+    fn extra() -> OpenApiRouter<AppState> { OpenApiRouter::new().routes(routes!(x)) }
+  - |
+    fn wire(app: Router) -> Router { app.merge(other()) }
+  - |
+    fn wire(app: Router) -> Router { app.nest("/api/v2", other()) }
+  - |
+    fn wire(app: Router) -> Router { app.fallback(not_found) }
+  - |
+    fn extra() -> axum::Router { axum::Router::<AppState>::new() }
+  - |
+    fn wire(app: Router) -> Router { app.method_not_allowed_fallback(method_not_allowed) }

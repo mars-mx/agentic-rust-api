@@ -1,0 +1,12 @@
+id: instrument-skip-all
+valid:
+  - |
+    #[tracing::instrument(skip_all, fields(org_id = %ctx.org_id))]
+    async fn create(ctx: &AuthContext) {}
+invalid:
+  - |
+    #[tracing::instrument]
+    async fn create(ctx: &AuthContext, secret: &str) {}
+  - |
+    #[instrument(skip(secret))]
+    async fn create(ctx: &AuthContext, secret: &str) {}

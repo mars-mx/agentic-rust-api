@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DO $$\nDECLARE\n    role_name text;\nBEGIN\n    FOREACH role_name IN ARRAY ARRAY['app_api', 'app_view', 'app_admin'] LOOP\n        IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = role_name) THEN\n            EXECUTE format('CREATE ROLE %I NOLOGIN', role_name);\n        END IF;\n    END LOOP;\nEND\n$$\n",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "1d5df37280a1832612c3207b27e59a79f1128106302ea4417c9cd058daf29240"
+}

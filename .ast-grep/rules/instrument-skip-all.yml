@@ -1,0 +1,13 @@
+id: instrument-skip-all
+language: rust
+severity: error
+message: Every #[instrument] uses skip_all and names the fields it records.
+note: Without skip_all the span records every argument with Debug, which leaks tokens, secrets and bodies into the logs.
+files:
+  - crates/*/src/**/*.rs
+  - bins/*/src/**/*.rs
+rule:
+  kind: attribute_item
+  regex: '\binstrument\b'
+  not:
+    regex: '\bskip_all\b'

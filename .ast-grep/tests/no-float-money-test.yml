@@ -1,0 +1,13 @@
+id: no-float-money
+valid:
+  - |
+    pub struct OrderLine { pub unit_price: Decimal, pub quantity: u32 }
+  - |
+    pub struct Match { pub similarity: f32 }
+invalid:
+  - |
+    pub struct OrderLine { pub unit_price: f64 }
+  - |
+    pub struct Invoice { pub total_amount: f32 }
+  - |
+    pub struct Invoice { pub tax: Option<f64> }

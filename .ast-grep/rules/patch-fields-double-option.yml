@@ -1,0 +1,20 @@
+id: patch-fields-double-option
+language: rust
+severity: error
+message: Every field of a `*Patch` DTO is `Option<Option<T>>`.
+note: None = not sent, Some(None) = set to null, Some(Some(v)) = set to v.
+files:
+  - crates/api/src/**/*.rs
+rule:
+  all:
+    - kind: field_declaration
+    - inside:
+        kind: struct_item
+        has:
+          field: name
+          regex: 'Patch$'
+        stopBy: end
+    - not:
+        has:
+          field: type
+          regex: '^Option<\s*Option<'

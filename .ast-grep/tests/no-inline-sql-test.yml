@@ -1,0 +1,17 @@
+id: no-inline-sql
+valid:
+  - |
+    async fn get(c: &mut PgConnection, id: Uuid) {
+        sqlx::query_file_as!(StoreRow, "queries/stores/get.sql", id).fetch_one(c).await;
+    }
+  - |
+    fn query(x: u8) -> u8 { x }
+invalid:
+  - |
+    async fn f(c: &mut PgConnection) { sqlx::query!("SELECT 1").execute(c).await; }
+  - |
+    async fn f(c: &mut PgConnection) { query_as!(Row, "SELECT 1").fetch_one(c).await; }
+  - |
+    async fn f(c: &mut PgConnection) { sqlx::query_scalar_unchecked!("SELECT 1").fetch_one(c).await; }
+  - |
+    async fn f(c: &mut PgConnection) { sqlx::query_file_as_unchecked!(Row, "queries/a.sql").fetch_one(c).await; }

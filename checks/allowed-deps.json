@@ -1,0 +1,80 @@
+{
+  "domain": [
+    "thiserror",
+    "uuid",
+    "time",
+    "rust_decimal"
+  ],
+  "db": [
+    "domain",
+    "sqlx",
+    "thiserror",
+    "uuid",
+    "time",
+    "rust_decimal",
+    "serde_json"
+  ],
+  "app": [
+    "domain",
+    "db",
+    "sqlx",
+    "thiserror",
+    "tracing",
+    "uuid",
+    "time",
+    "rust_decimal",
+    "serde",
+    "serde_json"
+  ],
+  "api": [
+    "app",
+    "axum",
+    "clerk-rs",
+    "domain",
+    "serde",
+    "serde_json",
+    "thiserror",
+    "time",
+    "tracing",
+    "utoipa",
+    "utoipa-axum",
+    "uuid"
+  ],
+  "telemetry": [
+    "tracing",
+    "tracing-subscriber"
+  ],
+  "config": [
+    "figment",
+    "serde",
+    "secrecy"
+  ],
+  "api-server": [
+    "api",
+    "app",
+    "config",
+    "telemetry",
+    "tokio",
+    "axum",
+    "tracing",
+    "secrecy",
+    "anyhow"
+  ],
+  "migrate": [
+    "config",
+    "telemetry",
+    "sqlx",
+    "tokio",
+    "tracing",
+    "secrecy",
+    "anyhow"
+  ],
+  "guard": [
+    "ra-ap-rustc_lexer"
+  ],
+  "xtask": [
+    "api",
+    "serde_json",
+    "sqlparser"
+  ]
+}

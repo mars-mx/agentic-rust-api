@@ -1,0 +1,9 @@
+id: no-migrations-in-services
+valid:
+  - |
+    async fn start(pool: PgPool) { serve(pool).await; }
+invalid:
+  - |
+    async fn start(pool: PgPool) { sqlx::migrate!().run(&pool).await; }
+  - |
+    async fn start(pool: PgPool, m: Migrator) { m.run(&pool).await; }

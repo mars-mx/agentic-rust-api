@@ -1,0 +1,17 @@
+id: db-no-transaction-control
+valid:
+  - |
+    pub async fn insert(c: &mut PgConnection, s: &StoreRow) { sqlx::query_file!("queries/stores/insert.sql", s.id).execute(c).await; }
+  - |
+    pub fn beginning(s: &Store) -> bool { s.begins_soon() }
+invalid:
+  - |
+    pub async fn insert(pool: &PgPool) { let tx = pool.begin().await; }
+  - |
+    pub async fn insert(tx: Transaction<'_, Postgres>) { tx.commit().await; }
+  - |
+    pub async fn insert(tx: Transaction<'_, Postgres>) { tx.rollback().await; }
+  - |
+    pub async fn insert(c: &mut PgConnection) { let tx = Acquire::begin(c).await; }
+  - |
+    pub async fn insert(pool: &PgPool) { let tx = pool.begin_with("BEGIN ISOLATION LEVEL SERIALIZABLE").await; }

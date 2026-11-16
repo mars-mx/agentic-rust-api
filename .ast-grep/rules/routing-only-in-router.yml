@@ -1,0 +1,22 @@
+id: routing-only-in-router
+language: rust
+severity: error
+message: Only crates/api/src/router.rs builds a router or adds routes.
+note: Add the handler there with .routes(routes!(handler)). Then the route is in the OpenAPI spec and behind the auth layer. No other file creates, nests or merges a router.
+files:
+  - crates/api/src/**/*.rs
+  - bins/*/src/**/*.rs
+ignores:
+  - crates/api/src/router.rs
+rule:
+  kind: call_expression
+  any:
+    - has:
+        field: function
+        kind: field_expression
+        has:
+          field: field
+          regex: '^(route|routes|nest|merge|route_service|nest_service|fallback|fallback_service|method_not_allowed_fallback|route_layer)$'
+    - has:
+        field: function
+        regex: '(^|::)(OpenApi)?Router(::<.*>)?::(new|default|with_openapi)$'

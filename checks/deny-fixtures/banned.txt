@@ -1,0 +1,6 @@
+openssl
+native-tls
+tokio-postgres
+deadpool-postgres
+diesel
+bb8

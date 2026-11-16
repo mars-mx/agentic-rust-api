@@ -1,0 +1,25 @@
+id: db-fn-takes-pgconnection
+language: rust
+severity: error
+message: A public db function takes `&mut PgConnection` as its first argument.
+note: The caller passes `&mut *tx`, so the same function runs inside the use case's transaction. Never take a pool.
+files:
+  - crates/db/src/**/*.rs
+rule:
+  all:
+    - kind: function_item
+    - has:
+        kind: visibility_modifier
+        regex: '^pub$'
+    - has:
+        kind: function_modifiers
+        regex: '\basync\b'
+    - not:
+        has:
+          field: parameters
+          has:
+            kind: parameter
+            nthChild: 1
+            has:
+              field: type
+              regex: '^&mut\s+(sqlx::)?(postgres::)?PgConnection$'

@@ -1,0 +1,16 @@
+id: no-float-money
+language: rust
+severity: error
+message: Money is rust_decimal::Decimal, never a float.
+files:
+  - crates/*/src/**/*.rs
+  - bins/*/src/**/*.rs
+rule:
+  all:
+    - kind: field_declaration
+    - has:
+        field: name
+        regex: '(?i)(price|amount|cost|total|fee|balance|tax)'
+    - has:
+        field: type
+        regex: '\bf(32|64)\b'

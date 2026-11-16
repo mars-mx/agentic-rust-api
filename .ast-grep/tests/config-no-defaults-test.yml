@@ -1,0 +1,21 @@
+id: config-no-defaults
+valid:
+  - |
+    #[derive(Debug, Deserialize)]
+    pub struct Config { pub listen_addr: SocketAddr }
+  - |
+    fn load() -> Figment { Figment::new().merge(Env::prefixed("APP_")) }
+invalid:
+  - |
+    #[derive(Debug, Default, Deserialize)]
+    pub struct Config { pub listen_addr: SocketAddr }
+  - |
+    pub struct Config { #[serde(default)] pub pool_size: u32 }
+  - |
+    impl Default for Config { fn default() -> Self { load() } }
+  - |
+    fn load() { Figment::new().merge(Serialized::defaults(base())); }
+  - |
+    fn load() { Figment::new().merge(Toml::file("app.toml")); }
+  - |
+    pub struct Config { pub pool_size: Option<u32> }

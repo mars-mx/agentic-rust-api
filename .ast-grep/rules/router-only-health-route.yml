@@ -1,0 +1,28 @@
+id: router-only-health-route
+language: rust
+severity: error
+message: The router has one plain route, .route("/health", ...). Every other route is .routes(routes!(handler)).
+note: A plain route or a raw service has no OpenAPI entry, so the permission catalog and Problem Details checks never see it.
+files:
+  - crates/api/src/router*.rs
+rule:
+  kind: call_expression
+  has:
+    field: function
+    kind: field_expression
+    has:
+      field: field
+      regex: '^(route|route_service|nest_service|fallback_service)$'
+  not:
+    all:
+      - has:
+          field: function
+          has:
+            field: field
+            regex: '^route$'
+      - has:
+          field: arguments
+          has:
+            nthChild: 1
+            kind: string_literal
+            regex: '^"/health"$'

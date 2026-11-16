@@ -1,0 +1,16 @@
+id: axum-path-syntax
+language: rust
+severity: error
+message: Path parameters use the axum 0.8 syntax /{id}, not /:id.
+files:
+  - crates/*/src/**/*.rs
+  - bins/*/src/**/*.rs
+rule:
+  kind: string_literal
+  regex: '/[:*]'
+  inside:
+    kind: call_expression
+    has:
+      field: function
+      regex: '\.(route|nest|route_service|nest_service)$'
+    stopBy: end

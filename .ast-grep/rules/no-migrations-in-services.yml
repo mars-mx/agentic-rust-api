@@ -1,0 +1,17 @@
+id: no-migrations-in-services
+language: rust
+severity: error
+message: Only the migrate binary runs migrations.
+note: Migrations run as a deploy step before the new version starts. The services never run them.
+files:
+  - bins/api-server/src/**/*.rs
+rule:
+  any:
+    - kind: macro_invocation
+      has:
+        field: macro
+        regex: '(^|::)migrate$'
+    - kind: type_identifier
+      regex: '^Migrator$'
+    - kind: identifier
+      regex: '^Migrator$'

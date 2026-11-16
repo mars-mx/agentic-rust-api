@@ -1,0 +1,2 @@
+#[instrument]
+async fn f() {}

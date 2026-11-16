@@ -1,0 +1,29 @@
+id: router-routes-behind-auth
+language: rust
+severity: error
+message: Every .routes(...) comes before .route_layer(...require_auth...) in the same chain.
+note: route_layer covers only the routes added before it. A route added after it, or in a chain without it, answers without a login.
+files:
+  - crates/api/src/router*.rs
+rule:
+  kind: call_expression
+  has:
+    field: function
+    kind: field_expression
+    has:
+      field: field
+      regex: '^routes$'
+  not:
+    inside:
+      stopBy: end
+      kind: call_expression
+      all:
+        - has:
+            field: function
+            kind: field_expression
+            has:
+              field: field
+              regex: '^route_layer$'
+        - has:
+            field: arguments
+            regex: 'require_auth'

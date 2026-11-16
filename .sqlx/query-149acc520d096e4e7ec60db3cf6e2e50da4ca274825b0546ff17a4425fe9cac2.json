@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH context AS (\n    SELECT oid, nspname\n    FROM pg_catalog.pg_namespace\n    WHERE nspname NOT IN ('public', 'information_schema')\n        AND nspname NOT LIKE 'pg\\_%'\n),\ngroup_role AS (\n    SELECT oid, rolname\n    FROM pg_catalog.pg_roles\n    WHERE rolname IN ('app_api', 'app_view', 'app_admin')\n),\ngate_owner AS (\n    SELECT oid FROM pg_catalog.pg_roles WHERE rolname = 'app_view'\n),\nviolation (message) AS (\n    SELECT format(\n        'table %I.%I: row level security must be enabled and forced',\n        n.nspname, c.relname\n    )\n    FROM pg_catalog.pg_class c\n    JOIN context n ON n.oid = c.relnamespace\n    WHERE c.relkind IN ('r', 'p')\n        AND NOT (c.relrowsecurity AND c.relforcerowsecurity)\n    UNION ALL\n    SELECT format(\n        'policy %I on %I.%I: goes to %s, but a policy goes only to app_api, app_view or app_admin',\n        p.polname, n.nspname, c.relname,\n        (\n            SELECT string_agg(\n                CASE WHEN r.role = 0 THEN 'PUBLIC' ELSE pg_catalog.pg_get_userbyid(r.role)::text END,\n                ', ' ORDER BY r.role\n            )\n            FROM unnest(p.polroles) AS r (role)\n        )\n    )\n    FROM pg_catalog.pg_policy p\n    JOIN pg_catalog.pg_class c ON c.oid = p.polrelid\n    JOIN context n ON n.oid = c.relnamespace\n    WHERE EXISTS (\n        SELECT FROM unnest(p.polroles) AS r (role)\n        WHERE r.role NOT IN (SELECT oid FROM group_role)\n    )\n    UNION ALL\n    SELECT format(\n        'view %I.%I: a view without security_invoker is a gate view and belongs to app_view, not %s',\n        n.nspname, c.relname, pg_catalog.pg_get_userbyid(c.relowner)\n    )\n    FROM pg_catalog.pg_class c\n    JOIN context n ON n.oid = c.relnamespace\n    WHERE c.relkind = 'v'\n        AND NOT EXISTS (\n            SELECT FROM pg_catalog.pg_options_to_table(c.reloptions) o\n            WHERE o.option_name = 'security_invoker'\n                AND lower(o.option_value) IN ('true', 'on', 'yes', '1')\n        )\n        AND c.relowner NOT IN (SELECT oid FROM gate_owner)\n    UNION ALL\n    SELECT format(\n        'function %s: a SECURITY DEFINER function is a gate function and belongs to app_view, not %s',\n        p.oid::regprocedure, pg_catalog.pg_get_userbyid(p.proowner)\n    )\n    FROM pg_catalog.pg_proc p\n    JOIN context n ON n.oid = p.pronamespace\n    WHERE p.prosecdef\n        AND p.proowner NOT IN (SELECT oid FROM gate_owner)\n    UNION ALL\n    SELECT format(\n        'function %s: PUBLIC may execute this SECURITY DEFINER function; REVOKE EXECUTE FROM PUBLIC before OWNER TO app_view',\n        p.oid::regprocedure\n    )\n    FROM pg_catalog.pg_proc p\n    JOIN context n ON n.oid = p.pronamespace\n    WHERE p.prosecdef\n        AND EXISTS (\n            SELECT FROM pg_catalog.aclexplode(coalesce(p.proacl, pg_catalog.acldefault('f', p.proowner))) a\n            WHERE a.grantee = 0 AND a.privilege_type = 'EXECUTE'\n        )\n)\nSELECT message AS \"message!\"\nFROM violation\nORDER BY message\n",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "message!",
+        "type_info": "Text",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "149acc520d096e4e7ec60db3cf6e2e50da4ca274825b0546ff17a4425fe9cac2"
+}

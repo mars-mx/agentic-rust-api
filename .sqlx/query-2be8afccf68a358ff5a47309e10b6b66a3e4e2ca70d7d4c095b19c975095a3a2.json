@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO catalog.item (organization_id, title, created_by)\nVALUES (NULL, $1, 'fixture')\n",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2be8afccf68a358ff5a47309e10b6b66a3e4e2ca70d7d4c095b19c975095a3a2"
+}

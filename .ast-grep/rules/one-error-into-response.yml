@@ -1,0 +1,14 @@
+id: one-error-into-response
+language: rust
+severity: error
+message: The api crate has exactly one IntoResponse implementation, in crates/api/src/error.rs.
+note: That implementation maps AppError to RFC 9457 Problem Details (application/problem+json). Return an AppError from the handler instead. Success responses use the types axum already implements, such as Json<Dto>, StatusCode, Redirect or a tuple of StatusCode, headers and Json<Dto>.
+files:
+  - crates/api/src/**/*.rs
+ignores:
+  - crates/api/src/error.rs
+rule:
+  kind: impl_item
+  has:
+    field: trait
+    regex: '(^|::)IntoResponse$'

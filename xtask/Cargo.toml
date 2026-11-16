@@ -1,0 +1,12 @@
+[package]
+name = "xtask"
+edition.workspace = true
+publish = false
+
+[dependencies]
+api = { path = "../crates/api", version = "0.0.0" }
+serde_json = "1.0.154"
+sqlparser = { version = "=0.64.0", default-features = false, features = ["std"] }
+
+[lints]
+workspace = true

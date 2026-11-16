@@ -1,0 +1,13 @@
+id: no-inline-sql
+language: rust
+severity: error
+message: SQL comes from a .sql file via query_file!, query_file_as! or query_file_scalar!.
+note: Inline SQL is invisible to the SQL checks. The unchecked macros skip the compile-time check against the schema. The non-macro functions are banned in clippy.toml.
+files:
+  - crates/*/src/**/*.rs
+  - bins/*/src/**/*.rs
+rule:
+  kind: macro_invocation
+  has:
+    field: macro
+    regex: '(^|::)(query(_as|_scalar)?(_unchecked)?|query_file(_as|_scalar)?_unchecked)$'

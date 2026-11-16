@@ -1,0 +1,15 @@
+id: one-error-into-response
+valid:
+  - |
+    async fn show() -> Result<Json<StoreDto>, AppError> { Ok(Json(load().await?)) }
+  - |
+    impl IntoResponses for StoreResponses { fn responses() -> Responses { Responses::new() } }
+  - |
+    impl IntoResponseParts for Location { type Error = Infallible; }
+invalid:
+  - |
+    impl IntoResponse for StoreError { fn into_response(self) -> Response { StatusCode::NOT_FOUND.into_response() } }
+  - |
+    impl axum::response::IntoResponse for StoreDto { fn into_response(self) -> axum::response::Response { Json(self).into_response() } }
+  - |
+    impl<T> IntoResponse for Created<T> { fn into_response(self) -> Response { StatusCode::CREATED.into_response() } }

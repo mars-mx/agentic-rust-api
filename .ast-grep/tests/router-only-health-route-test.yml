@@ -1,0 +1,17 @@
+id: router-only-health-route
+valid:
+  - |
+    fn router() -> Router { Router::new().route("/health", get(health)) }
+  - |
+    fn api() -> OpenApiRouter<AppState> { OpenApiRouter::new().routes(routes!(create_deletion)) }
+invalid:
+  - |
+    fn router() -> Router { Router::new().route("/api/v1/x", get(x)) }
+  - |
+    fn router() -> Router { Router::new().route(HEALTH, get(health)) }
+  - |
+    fn router() -> Router { Router::new().route_service("/health", svc) }
+  - |
+    fn router() -> Router { Router::new().nest_service("/static", ServeDir::new("x")) }
+  - |
+    fn router() -> Router { Router::new().fallback_service(svc) }

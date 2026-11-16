@@ -1,0 +1,37 @@
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-print-in-tests = true
+allow-dbg-in-tests = true
+avoid-breaking-exported-api = false
+
+await-holding-invalid-types = [
+  { path = "tracing::span::Entered", reason = "A span guard held across .await attaches the span to unrelated work. Use Instrument::instrument." },
+  { path = "tracing::span::EnteredSpan", reason = "A span guard held across .await attaches the span to unrelated work. Use Instrument::instrument." },
+]
+
+disallowed-methods = [
+  { path = "std::env::var", reason = "Configuration comes from the typed Config (figment). Never read the environment directly." },
+  { path = "std::env::var_os", reason = "Configuration comes from the typed Config (figment). Never read the environment directly." },
+  { path = "std::env::vars", reason = "Configuration comes from the typed Config (figment). Never read the environment directly." },
+  { path = "std::env::vars_os", reason = "Configuration comes from the typed Config (figment). Never read the environment directly." },
+  { path = "std::env::set_var", reason = "The environment is read-only at runtime." },
+  { path = "std::env::remove_var", reason = "The environment is read-only at runtime." },
+  { path = "std::thread::sleep", reason = "Blocks a tokio worker thread. Use tokio::time::sleep." },
+  { path = "std::process::exit", reason = "Skips graceful shutdown and destructors. Return an error from main instead." },
+  { path = "uuid::Uuid::new_v4", reason = "IDs are UUIDv7. Use Uuid::now_v7.", allow-invalid = true },
+  { path = "time::OffsetDateTime::now_local", reason = "Time is always UTC. Use OffsetDateTime::now_utc.", allow-invalid = true },
+  { path = "sqlx::query", reason = "Unchecked SQL. Use query_file! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::query_as", reason = "Unchecked SQL. Use query_file_as! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::query_scalar", reason = "Unchecked SQL. Use query_file_scalar! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::query_with", reason = "Unchecked SQL. Use query_file! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::query_as_with", reason = "Unchecked SQL. Use query_file_as! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::query_scalar_with", reason = "Unchecked SQL. Use query_file_scalar! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::raw_sql", reason = "Unchecked SQL. Use query_file! with a .sql file.", allow-invalid = true },
+]
+
+disallowed-types = [
+  { path = "sqlx::QueryBuilder", reason = "Runtime-built SQL is not checked against the schema. Use query_file! with a .sql file.", allow-invalid = true },
+  { path = "sqlx::RawSql", reason = "Unchecked SQL. Use query_file! with a .sql file.", allow-invalid = true },
+  { path = "time::PrimitiveDateTime", reason = "Time is always UTC with an offset. Use OffsetDateTime.", allow-invalid = true },
+]

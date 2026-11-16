@@ -1,0 +1,11 @@
+[package]
+name = "domain"
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+thiserror = "2.0.21"
+uuid = "1.29.2"

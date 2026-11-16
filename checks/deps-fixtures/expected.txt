@@ -1,0 +1,4 @@
+domain -> sqlx: this layer may not depend on sqlx.
+crates/db/Cargo.toml: missing [lints] workspace = true.
+crates/api/clippy.toml: a crate-level clippy.toml replaces the workspace one
+unlisted: not listed in checks/allowed-deps.json.

@@ -1,0 +1,15 @@
+id: no-pub-use-external
+valid:
+  - |
+    pub use crate::stores::router;
+  - |
+    pub(crate) use self::error::DbError;
+  - |
+    use sqlx::PgConnection;
+invalid:
+  - |
+    pub use sqlx::PgPool;
+  - |
+    pub use sqlx;
+  - |
+    pub(crate) use async_nats::jetstream::Context;

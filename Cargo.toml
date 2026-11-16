@@ -1,0 +1,66 @@
+[workspace]
+resolver = "3"
+members = ["guard", "crates/*", "bins/*", "xtask"]
+exclude = ["checks"]
+
+[workspace.package]
+edition = "2024"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+rust_2018_idioms = { level = "deny", priority = -1 }
+unreachable_pub = "deny"
+missing_debug_implementations = "deny"
+trivial_numeric_casts = "deny"
+unused_lifetimes = "deny"
+redundant_lifetimes = "deny"
+unexpected_cfgs = "deny"
+unused_qualifications = "deny"
+let_underscore_drop = "deny"
+
+[workspace.lints.clippy]
+pedantic = { level = "deny", priority = -1 }
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+must_use_candidate = "allow"
+module_name_repetitions = "allow"
+similar_names = "allow"
+doc_markdown = "allow"
+
+unwrap_used = "deny"
+expect_used = "deny"
+get_unwrap = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+panic_in_result_fn = "deny"
+unwrap_in_result = "deny"
+exit = "deny"
+
+map_err_ignore = "deny"
+unused_result_ok = "deny"
+assertions_on_result_states = "deny"
+let_underscore_must_use = "deny"
+
+print_stdout = "deny"
+print_stderr = "deny"
+dbg_macro = "deny"
+
+await_holding_lock = "deny"
+let_underscore_future = "deny"
+large_futures = "deny"
+unused_async = "deny"
+
+clone_on_ref_ptr = "deny"
+rc_buffer = "deny"
+as_conversions = "deny"
+string_slice = "deny"
+mod_module_files = "deny"
+iter_over_hash_type = "deny"
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"
+
+disallowed_methods = "deny"
+disallowed_types = "deny"
+disallowed_macros = "deny"

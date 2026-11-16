@@ -1,0 +1,17 @@
+id: db-fn-takes-pgconnection
+valid:
+  - |
+    pub async fn get(c: &mut PgConnection, org: OrgId, id: StoreId) -> Result<StoreRow, DbError> { load(c, org, id).await }
+  - |
+    pub async fn get(c: &mut sqlx::PgConnection, org: OrgId) -> Result<(), DbError> { Ok(()) }
+  - |
+    pub async fn get(c: &mut sqlx::postgres::PgConnection, org: OrgId) -> Result<(), DbError> { Ok(()) }
+  - |
+    fn to_row(s: Store) -> StoreRow { s.into() }
+invalid:
+  - |
+    pub async fn get(pool: &PgPool, id: StoreId) -> Result<StoreRow, DbError> { load(pool, id).await }
+  - |
+    pub async fn get(org: OrgId, c: &mut PgConnection) -> Result<(), DbError> { Ok(()) }
+  - |
+    pub async fn ping() -> Result<(), DbError> { Ok(()) }

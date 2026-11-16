@@ -1,0 +1,14 @@
+id: no-pub-use-external
+language: rust
+severity: error
+message: A workspace crate never re-exports another crate.
+note: A re-export hands the dependency to every caller and slips past the dependency allowlist in checks/allowed-deps.json. Wrap what the caller needs in a type of this crate.
+files:
+  - crates/*/src/**/*.rs
+  - bins/*/src/**/*.rs
+rule:
+  kind: use_declaration
+  has:
+    kind: visibility_modifier
+  not:
+    regex: '^pub(\([^)]*\))?\s+use\s+(crate|self|super)::'

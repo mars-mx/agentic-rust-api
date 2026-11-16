@@ -1,0 +1,15 @@
+[package]
+name = "guard"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+
+[[bin]]
+name = "no-comments"
+path = "src/main.rs"
+
+[dependencies]
+ra-ap-rustc_lexer = "0.185.0"
+
+[lints]
+workspace = true

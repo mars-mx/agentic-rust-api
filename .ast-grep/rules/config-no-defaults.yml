@@ -1,0 +1,23 @@
+id: config-no-defaults
+language: rust
+severity: error
+message: Configuration has no defaults in code and comes from environment variables only.
+note: Every value is required. A missing value stops the process at startup. An Option field is a default of None.
+files:
+  - crates/config/src/**/*.rs
+rule:
+  any:
+    - kind: attribute_item
+      regex: 'derive\s*\([^)]*\bDefault\b'
+    - kind: attribute_item
+      regex: 'serde\s*\([^)]*\bdefault\b'
+    - pattern: impl Default for $T { $$$ }
+    - kind: call_expression
+      has:
+        field: function
+        regex: '^(figment::providers::)?(Serialized|Toml|Json|Yaml)::'
+    - all:
+        - kind: field_declaration
+        - has:
+            field: type
+            regex: '^Option\s*<'

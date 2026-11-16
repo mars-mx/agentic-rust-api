@@ -1,0 +1,12 @@
+id: db-no-transaction-control
+language: rust
+severity: error
+message: The db crate never begins, commits or rolls back a transaction.
+note: Transaction boundaries live in the app crate. Each use case opens exactly one transaction.
+files:
+  - crates/db/src/**/*.rs
+rule:
+  kind: call_expression
+  has:
+    field: function
+    regex: '(\.|::)(begin|begin_with|commit|rollback)$'

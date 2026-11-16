@@ -1,0 +1,17 @@
+[package]
+name = "banned"
+version = "0.0.0"
+edition.workspace = true
+publish = false
+
+[dependencies]
+openssl = "0.10"
+native-tls = "0.2"
+tokio-postgres = "0.7"
+deadpool-postgres = "0.14"
+diesel = { version = "2", default-features = false, features = ["postgres"] }
+bb8 = "0.9"
+itoa = "*"
+
+[lints]
+workspace = true

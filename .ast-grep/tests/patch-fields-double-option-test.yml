@@ -1,0 +1,11 @@
+id: patch-fields-double-option
+valid:
+  - |
+    pub struct StorePatch { pub name: Option<Option<String>>, pub currency: Option<Option<Currency>> }
+  - |
+    pub struct StoreDto { pub name: Option<String> }
+invalid:
+  - |
+    pub struct StorePatch { pub name: Option<String> }
+  - |
+    pub struct StorePatch { pub name: String }
