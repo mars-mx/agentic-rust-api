@@ -1,5 +1,5 @@
-invoker_view
-search_items
-policy org_scope
+table fixture.guarded
 policy view_read
-policy admin_access
+view fixture.gate:
+invoker_view
+closed_gate

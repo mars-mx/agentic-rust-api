@@ -12,6 +12,7 @@ use utoipa_axum::routes;
 use crate::auth::{Auth, require_auth};
 use crate::catalog;
 use crate::error::{AppError, ErrorCode, Problem};
+use crate::me;
 
 #[derive(OpenApi)]
 #[openapi(components(schemas(Problem, ErrorCode)))]
@@ -21,6 +22,7 @@ fn api<J: JwksProvider + Send + Sync + 'static>(auth: Auth<J>) -> OpenApiRouter<
     OpenApiRouter::with_openapi(ApiDoc::openapi())
         .routes(routes!(catalog::list_items, catalog::create_item))
         .routes(routes!(catalog::search_items))
+        .routes(routes!(me::me))
         .route_layer(from_fn_with_state(auth, require_auth::<J>))
 }
 
@@ -104,17 +106,11 @@ mod tests {
 
     #[tokio::test]
     async fn an_api_route_answers_unauthenticated_without_a_token() {
-        for (method, path) in [
-            (Method::GET, "/api/v1/items"),
-            (Method::POST, "/api/v1/items"),
-            (Method::GET, "/api/v1/items/search?q=lamp"),
-        ] {
-            let (status, media_type, body) = call(method, path).await;
-            assert_eq!(status, StatusCode::UNAUTHORIZED, "{path}");
-            assert_eq!(media_type.as_deref(), Some("application/problem+json"));
-            let body: Value = serde_json::from_slice(&body).unwrap();
-            assert_eq!(body["code"], "unauthenticated");
-        }
+        let (status, media_type, body) = call(Method::GET, "/api/v1/me").await;
+        assert_eq!(status, StatusCode::UNAUTHORIZED);
+        assert_eq!(media_type.as_deref(), Some("application/problem+json"));
+        let body: Value = serde_json::from_slice(&body).unwrap();
+        assert_eq!(body["code"], "unauthenticated");
     }
 
     #[tokio::test]

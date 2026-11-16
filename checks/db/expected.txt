@@ -1,7 +1,7 @@
-table catalog.item: row level security must be enabled and forced
-table catalog.open: row level security must be enabled and forced
-policy everyone on catalog.item: goes to PUBLIC, but a policy goes only to app_api, app_view or app_admin
-policy login on catalog.item: goes to postgres, app_api, but a policy goes only to app_api, app_view or app_admin
-view catalog.visible_item: a view without security_invoker is a gate view and belongs to app_view, not postgres
-function catalog.leak(): a SECURITY DEFINER function is a gate function and belongs to app_view, not postgres
-function catalog.leak(): PUBLIC may execute this SECURITY DEFINER function
+table fixture.open: row level security must be enabled and forced
+table fixture.unforced: row level security must be enabled and forced
+policy everyone on fixture.guarded: goes to PUBLIC, but a policy goes only to app_api, app_view or app_admin
+policy login on fixture.guarded: goes to postgres, app_api, but a policy goes only to app_api, app_view or app_admin
+view fixture.unowned_gate: a view without security_invoker is a gate view and belongs to app_view, not postgres
+function fixture.leak(): a SECURITY DEFINER function is a gate function and belongs to app_view, not postgres
+function fixture.leak(): PUBLIC may execute this SECURITY DEFINER function

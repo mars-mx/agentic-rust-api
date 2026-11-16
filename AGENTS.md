@@ -74,7 +74,8 @@ rejects any comment in Rust code.
   The API reads them through a gate: a gate view, or a `SECURITY DEFINER` gate
   function, owned by `app_view`. For a gate function, `REVOKE EXECUTE ... FROM
   PUBLIC` and `GRANT EXECUTE ... TO app_api` come before `OWNER TO app_view`.
-  `catalog` is the worked example.
+  `catalog` is the worked example. It is only an example: to remove it,
+  follow the steps in `README.md`.
 - After you change a query or a migration, refresh the committed sqlx cache
   with `make sqlx-prepare`.
 

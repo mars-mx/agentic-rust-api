@@ -31,7 +31,7 @@ cargo test --workspace --locked -- --ignored
 
 docker exec --interactive "$container" psql --quiet --username postgres --set ON_ERROR_STOP=1 <"$fixtures/broken.sql"
 if output="$(cargo run --quiet --locked -p migrate 2>&1)"; then
-  printf 'db fixture check failed: migrate passed a database that breaks every catalog rule\n%s\n' "$output" >&2
+  printf 'db fixture check failed: migrate passed a database that breaks every catalog rule in checks/db/broken.sql\n%s\n' "$output" >&2
   exit 1
 fi
 

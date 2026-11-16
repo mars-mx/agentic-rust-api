@@ -35,7 +35,7 @@ impl Database {
         })
     }
 
-    async fn begin(&self, scope: &Scope) -> Result<Transaction<'static, Postgres>, Error> {
+    pub async fn begin(&self, scope: &Scope) -> Result<Transaction<'static, Postgres>, Error> {
         let mut transaction = self.pool.begin().await?;
         db::scope(&mut transaction, &scope.organization_id, &scope.user_id).await?;
         Ok(transaction)

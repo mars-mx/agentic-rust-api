@@ -1,6 +1,7 @@
 pub mod auth;
 pub mod catalog;
 pub mod error;
+pub mod me;
 pub mod permission;
 pub mod router;
 

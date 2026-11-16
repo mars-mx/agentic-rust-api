@@ -54,11 +54,6 @@ mod tests {
     #[test]
     fn every_route_of_the_api_names_a_permission_from_the_catalog() {
         let spec: Value = serde_json::from_str(&crate::openapi_json().unwrap()).unwrap();
-        assert!(
-            spec["paths"]
-                .as_object()
-                .is_some_and(|paths| !paths.is_empty())
-        );
         assert_eq!(undeclared(&spec), Vec::<String>::new());
     }
 

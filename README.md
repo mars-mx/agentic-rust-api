@@ -112,10 +112,21 @@ in `crates/app/tests/two_organizations.rs` prove three things:
 - It cannot write rows for another organization.
 - A query without a scope fails instead of reading rows.
 
-Keep `catalog` as the reference context. The database fixtures in
-`checks/db/`, the two-organization tests and the permission catalog test all
-run against it. Removing it means rewriting those fixtures for one of your own
-contexts.
+`catalog` is only an example; no check depends on it. The database fixtures
+in `checks/db/` bring their own schema. Keep it as a reference until your first
+context works, then remove it:
+
+1. Delete `crates/domain/src/catalog.rs`, `crates/db/src/catalog.rs`,
+   `crates/app/src/catalog.rs` and `crates/api/src/catalog.rs`, and the
+   `pub mod catalog;` line in each crate's `lib.rs`.
+2. Delete `crates/db/queries/catalog/`, `crates/db/migrations/0001_catalog.sql`
+   and `crates/app/tests/`. Keep `crates/db/migrations/.gitkeep`.
+3. In `crates/api/src/router.rs`, delete the two catalog `.routes(...)` lines
+   and `use crate::catalog;`. The `/api/v1/me` route stays, so the auth layer
+   always has a route behind it.
+4. Run `cargo fmt --all`, `make sqlx-prepare`, then `make validate`.
+
+Your own context then needs its own two-organization test.
 
 The organization id is the identity provider's organization id, stored as
 `text`. That keeps tokens and rows in one id space, so no mapping table is
