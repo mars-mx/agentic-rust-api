@@ -36,7 +36,7 @@ fi
 
 checkout="$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null)" || exit 0
 checkout="$(cd "$checkout" && pwd -P)"
-[ "$(cd "$(git -C "$checkout" rev-parse --git-common-dir)" && pwd -P)" = "$(cd "$(git -C "$root" rev-parse --git-common-dir)" && pwd -P)" ] || exit 0
+[ "$(cd "$(git -C "$checkout" rev-parse --path-format=absolute --git-common-dir)" && pwd -P)" = "$(cd "$(git -C "$root" rev-parse --path-format=absolute --git-common-dir)" && pwd -P)" ] || exit 0
 case "$path" in "$checkout"/*) ;; *) exit 0 ;; esac
 rel="${path#"$checkout"/}"
 

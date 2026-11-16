@@ -112,8 +112,10 @@ in `crates/app/tests/two_organizations.rs` prove three things:
 - It cannot write rows for another organization.
 - A query without a scope fails instead of reading rows.
 
-Delete `catalog` once you have your own context. `make validate` keeps checking
-whatever you build.
+Keep `catalog` as the reference context. The database fixtures in
+`checks/db/`, the two-organization tests and the permission catalog test all
+run against it. Removing it means rewriting those fixtures for one of your own
+contexts.
 
 The organization id is the identity provider's organization id, stored as
 `text`. That keeps tokens and rows in one id space, so no mapping table is
@@ -148,9 +150,11 @@ Everything is configured through environment variables, and none has a default.
 
 Deploy order:
 
-1. Run `migrate` as the database owner. It needs `CREATEROLE` the first time.
-   If a catalog check fails, it exits non-zero, and the new version must not
-   start.
+1. Run `migrate` as a superuser, or as a role that has `CREATEROLE` on the
+   first run and may `SET ROLE app_view`. It needs the second because it hands
+   the gate views and functions to `app_view`. The checks here only exercise
+   the superuser path. If a catalog check fails, `migrate` exits non-zero, and
+   the new version must not start.
 2. Start `api-server` with a login role that is a member of `app_api`. Never
    use the owner or a superuser: both bypass row level security.
 

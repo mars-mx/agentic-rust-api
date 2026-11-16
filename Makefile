@@ -45,7 +45,7 @@ fixtures: tools
 	checks/deny-fixtures/run.sh
 
 hooks:
-	python3 -m unittest discover -s scripts/tests -t . -q
+	python3 -m unittest discover -s scripts/tests -q
 
 db: tools
 	checks/db/run.sh

@@ -72,7 +72,7 @@ class PreWriteTests(unittest.TestCase):
 
 class PostWriteTests(unittest.TestCase):
     def write_rs(self, source: str) -> Path:
-        directory = tempfile.TemporaryDirectory(dir=ROOT / "crates")
+        directory = tempfile.TemporaryDirectory(dir=ROOT / "guard")
         self.addCleanup(directory.cleanup)
         path = Path(directory.name) / "sample.rs"
         path.write_text(source)
